@@ -10,9 +10,9 @@ npm ~> v5.6.0
 
 ### file expl..
 
-servercreate : server.js
+servercreate(127.0.0.1:3000) : server.js
 
-clientside : publie/~.html
+clientside : public/~.html
 
 
 ### last update
