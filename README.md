@@ -4,9 +4,13 @@
 블록체인을 활용한 VR 쇼핑몰
 
 ## work environment
+os ~> windows10
+
 node ~> v8.11.1
 
 npm ~> v5.6.0
+
+DB(mysql) ~> v5.7.22
 
 ### file expl..
 
