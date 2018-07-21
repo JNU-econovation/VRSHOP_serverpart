@@ -1,0 +1,106 @@
+<!-- transaction뽑아오는거-->
+<!doctype html>
+<html lang="en" ng-app>
+  <head>
+    <title>Ropsten transaction check</title>
+  </head>
+  <body>
+
+    <div class="container" >
+      <h1>transaction list check site</h1> 
+      <span id="countIns"></span>
+      <input id="address" type="textfiled"></input>
+      <button id="addressbtn" onclick ="checkSellList()">check transaction</button>
+      <br>
+      
+      </div>
+        <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+        <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+        <script type="text/javascript" src="js/jquery.min.js"></script>
+        <script>
+        
+        /* global $ */
+          var string;
+          
+          
+          function checkSellList(){ 
+           
+            
+            var url = "https://api-ropsten.etherscan.io/api?module=account&action=txlist&address=0x0081d0FCC2970527853D269dE32FCFce0309dde0&startblock=0&endblock=99999999&sort=asc&apikey=YourApiKeyToken";
+            var req = new XMLHttpRequest();
+            req.open('GET', url, false);
+            req.send(null);  
+            string = req.responseText;
+
+
+
+            var url2 = "https://api-ropsten.etherscan.io/api?module=account&action=txlistinternal&address=0x64FB6DD2dF3682D33d8Cbc9629D9c8fd878f78fa&startblock=0&endblock=99999999&page=1&offset=10&sort=asc&apikey=YourApiKeyToken";
+            var req2 = new XMLHttpRequest();
+            req2.open('GET', url2, false);
+            req2.send(null);  
+            string2 = req2.responseText;
+
+
+            var pars = JSON.parse(string);
+            var pars2 = JSON.parse(string2);
+            console.log(string);
+
+            for(var i=0;i<pars.result.length;i++){
+              var results = pars.result[i];
+              for(var j=0;j<pars2.result.length;j++){
+                var results2 = pars2.result[j];
+
+                if(results.hash == results2.hash){
+
+                    var br = document.createElement("BR");
+                    var para = document.createElement("P");
+                    var d = document.getElementById("transaction");
+
+                    var t = document.createTextNode("[구매자] : " + results.from);
+                    d.appendChild(document.createElement("br"));
+                    para.appendChild(t);
+                    d.appendChild(para);
+                    para.appendChild(document.createElement("br"))
+
+
+                    var t = document.createTextNode(" [판매 금액] : "+results.value/1000000000000000000 + " ETH");
+                    d.appendChild(document.createElement("br"));
+                    para.appendChild(t);
+                    d.appendChild(para);
+                    para.appendChild(document.createElement("br"))
+
+                    var t = document.createTextNode(" [트랜잭션 해쉬값] : "+results.hash);
+                    d.appendChild(document.createElement("br"));
+                    para.appendChild(t);
+                    d.appendChild(para);
+                    para.appendChild(document.createElement("br"))
+                      var hex = results.input;
+                      var toAscii = function(hex){
+                        var str = '';
+                        var i = 0;
+                        var l = hex.length;
+                        if(hex.substring(0,2)==='0x'){
+                          i = 2;
+                        }
+                        for(;i<l;i+=2){
+                          var code = parseInt(hex.substr(i,2),16);
+                          if(code ===0) continue;
+                          str+=String.fromCharCode(code);
+                        }
+                        return str;
+                      }
+                    var t = document.createTextNode(" [첨부 데이터] : "+ results.input);
+                    d.appendChild(document.createElement("br"));
+                    para.appendChild(t);
+                    d.appendChild(para);
+                    para.appendChild(document.createElement("br"))
+                  }
+              }
+            }
+          }
+
+
+    </script>
+  <div class="transaction" id = "transaction"></div>
+</body>
+</html>
